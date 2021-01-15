@@ -1,30 +1,16 @@
-include Makefile.conf
+NAME=cordova_hot_code_push
+PACKAGE=-package gen_js_api,js_of_ocaml
+all:
+	ocamlfind gen_js_api/gen_js_api $(NAME).mli
+	ocamlfind ocamlc $(PACKAGE) $(NAME).mli
+	ocamlfind ocamlc -c -package gen_js_api.ppx $(PACKAGE) $(NAME).ml
+	ocamlfind ocamlc -a -package gen_js_api.ppx -o $(NAME).cma $(NAME).cmo
 
-################################################################################
-CC				= ocamlc
-PACKAGES		= -package gen_js_api
+install: all
+	ocamlfind install cordova-plugin-hot-code-push META *.cma *.cmi
 
-ML_FILE			= $(patsubst %.mli, %.ml, $(MLI_FILE))
-CMI_FILE		= $(patsubst %.mli, %.cmi, $(MLI_FILE))
-CMO_FILE		= $(patsubst %.mli, %.cmo, $(MLI_FILE))
-CMA_FILE		= $(patsubst %.mli, %.cma, $(MLI_FILE))
-################################################################################
-
-################################################################################
-build:
-	ocamlfind gen_js_api/gen_js_api $(MLI_FILE)
-	ocamlfind $(CC) -c $(PACKAGES) $(MLI_FILE)
-	ocamlfind $(CC) -c $(PACKAGES) $(ML_FILE)
-	ocamlfind $(CC) -a -o $(CMA_FILE) $(CMO_FILE)
-
-install: build
-	ocamlfind install $(LIB_NAME) META $(CMA_FILE) $(CMI_FILE)
-
-remove:
-	ocamlfind remove $(LIB_NAME)
+mrproper:
+	rm -rf maps *.cmi *.cmo *.cma
 
 clean:
-	$(RM) $(CMI_FILE) $(CMO_FILE) $(ML_FILE) $(CMA_FILE)
-
-re: clean all
-################################################################################
+	rm -rf $(NAME) $(NAME).ml *.cmi *.cmo *.cma

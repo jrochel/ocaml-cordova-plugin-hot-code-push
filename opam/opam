@@ -12,11 +12,12 @@ license:      "LGPL-3.0 with OCaml linking exception"
 
 version:      "1.2"
 
-build: [make "build"]
+build: [make]
 install: [make "install"]
-remove: [make "remove"]
+remove: ["ocamlfind" "remove" "cordova-plugin-hot-code-push"]
 
 depends: [
   "gen_js_api"
+  "ocamlfind" {build}
 ]
 available: [ ocaml-version >= "4.03.0" ]
