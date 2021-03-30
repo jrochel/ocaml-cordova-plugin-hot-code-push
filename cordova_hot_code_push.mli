@@ -1,4 +1,4 @@
-val fetch_update : (error:string option -> data:string option -> unit) -> unit
+val fetch_update : (string option -> string option -> unit) -> unit
   [@@js.global "chcp.fetchUpdate"]
 
 module Event :
